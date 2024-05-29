@@ -1,12 +1,21 @@
 const path = require('path');
-const ADODB = require('node-adodb');
+const odbc = require('odbc');
+const os = require('os');
 
 exports.processing = async (data, id) => {
-	const connectionString = path.resolve(__dirname, data.headers.path);
-	const connection = ADODB.open(`Provider=Microsoft.Jet.OLEDB.4.0;Data Source=${connectionString};`);
+	const dbPath = path.resolve(__dirname, data.headers.path);
+
+	let connectionString;
+	if (os.platform() === 'win32') {
+		connectionString = `DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=${dbPath};`;
+	} else {
+		connectionString = `DSN=MyAccessDB;Database=${dbPath};`;
+	}
 
 	const getTables = async () => {
+		let connection;
 		try {
+			connection = await odbc.connect(connectionString);
 			const sql = 'SELECT TOP 500 * FROM IFBYWD_BATCH_NEW ORDER BY TimeCol DESC';
 			const rawData = await connection.query(sql);
 
@@ -29,10 +38,14 @@ exports.processing = async (data, id) => {
 
 			return result;
 		} catch (error) {
-			console.error('Error retrieving tables from Access database:', JSON.stringify(error));
+			console.error('Error retrieving tables from Access database:', error);
+		} finally {
+			if (connection) {
+				await connection.close();
+			}
 		}
 	};
 
 	const tables = await getTables();
-	return (tables)
-}
+	return tables;
+};
