@@ -16,10 +16,10 @@ exports.processing = async (data, id) => {
 		let connection;
 		try {
 			connection = await odbc.connect(connectionString);
-			const sql = 'SELECT TOP 500 * FROM IFBYWD_BATCH_NEW ORDER BY TimeCol DESC';
+			const sql = 'SELECT * FROM IFBYWD_BATCH_NEW';
 			const rawData = await connection.query(sql);
 
-			const result = rawData.map(item => {
+			const result = rawData.reverse().slice(0, 500).map(item => {
 				let filteredItem = {
 					"id": id.toString(),
 					"timestamp": "",

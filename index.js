@@ -135,7 +135,7 @@ async function connectToMongoDB() {
 							default:
 								break;
 						}
-						await sleep(10000);
+						await sleep(60000);
 					} catch (e) {
 						await sleep(10000);
 					}
