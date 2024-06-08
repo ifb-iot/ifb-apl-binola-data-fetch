@@ -162,7 +162,7 @@ async function connectToMongoDB() {
 			while (1) {
 				getParameters1();
 				getParameters2();
-				await sleep(3000);
+				await sleep(10000);
 			}
 		} else {
 			console.log("DEVICE NOT CONFIGURED")
