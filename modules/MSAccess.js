@@ -12,6 +12,8 @@ exports.processing = async (data, id) => {
 		connectionString = `DSN=MyAccessDB;Database=${dbPath};`;
 	}
 
+	console.log(data.headers.path)
+
 	const getTables = async () => {
 		let connection;
 		try {
