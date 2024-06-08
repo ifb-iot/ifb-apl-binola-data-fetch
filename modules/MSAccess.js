@@ -9,7 +9,7 @@ exports.processing = async (data, id) => {
 	if (os.platform() === 'win32') {
 		connectionString = `DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=${dbPath};`;
 	} else {
-		connectionString = `DSN=MyAccessDB;Database=${dbPath};`;
+		connectionString = `DSN=${String(id)};Database=${dbPath};`;
 	}
 
 	console.log(data.headers.path)
