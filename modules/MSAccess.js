@@ -2,6 +2,11 @@ const path = require('path');
 const odbc = require('odbc');
 const os = require('os');
 
+const parseDate = (str) => {
+	const [year, month, day] = str.split('-');
+	return new Date(year, month - 1, day);
+};
+
 exports.processing = async (data, id) => {
 	const dbPath = path.resolve(__dirname, data.headers.path);
 
@@ -21,7 +26,16 @@ exports.processing = async (data, id) => {
 			const sql = 'SELECT * FROM ' + data.headers.database;
 			const rawData = await connection.query(sql);
 
-			const result = rawData.reverse().slice(0, 500).map(item => {
+			const currentDate = new Date();
+			const oneMonthsAgo = new Date();
+			oneMonthsAgo.setMonth(currentDate.getMonth() - 1);
+
+			const filteredData = rawData.filter(item => {
+				const itemDate = parseDate(item[data.signals.timestamp].substring(0, 10));
+				return itemDate >= oneMonthsAgo && itemDate <= currentDate;
+			});
+
+			const result = filteredData.map(item => {
 				let filteredItem = {
 					"id": id.toString(),
 					"timestamp": "",
