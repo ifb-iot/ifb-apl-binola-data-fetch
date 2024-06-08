@@ -123,15 +123,9 @@ async function connectToMongoDB() {
 									break;
 								}
 							case "ms-access":
-								// const pingMSAccess = await executePing(iterator.parameters.headers.ip)
-								// if (pingMSAccess === true) {
-									const MSAccessResponse = await MSAccess.processing(iterator.parameters, iterator._id)
-									await dataSave.save(MSAccessResponse, iterator.machine, iterator.parameters.headers)
-								// 	break;
-								// } else {
-								// 	console.log("MACHINE NOT CONNECTED | " + iterator.parameters.headers.ip + ":" + iterator.parameters.headers.port + " | " + iterator.machine.location + " | " + iterator.machine.make + " " + iterator.machine.model)
-								// 	break;
-								// }
+								const MSAccessResponse = await MSAccess.processing(iterator.parameters, iterator._id)
+								await dataSave.save(MSAccessResponse, iterator.machine, iterator.parameters.headers)
+								break;
 							default:
 								break;
 						}
