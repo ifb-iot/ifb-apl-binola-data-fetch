@@ -18,7 +18,7 @@ exports.processing = async (data, id) => {
 		let connection;
 		try {
 			connection = await odbc.connect(connectionString);
-			const sql = 'SELECT * FROM `' + data.headers.database + '`';
+			const sql = 'SELECT * FROM ' + data.headers.database;
 			const rawData = await connection.query(sql);
 
 			const result = rawData.reverse().slice(0, 500).map(item => {
