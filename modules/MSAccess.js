@@ -27,12 +27,12 @@ exports.processing = async (data, id) => {
 			const rawData = await connection.query(sql);
 
 			const currentDate = new Date();
-			const oneMonthsAgo = new Date();
-			oneMonthsAgo.setMonth(currentDate.getMonth() - 1);
+			const threeDaysAgo = new Date();
+			threeDaysAgo.setDate(currentDate.getDate() - 3);
 
 			const filteredData = rawData.filter(item => {
 				const itemDate = parseDate(item[data.signals.timestamp].substring(0, 10));
-				return itemDate >= oneMonthsAgo && itemDate <= currentDate;
+				return itemDate >= threeDaysAgo && itemDate <= currentDate;
 			});
 
 			const result = filteredData.map(item => {

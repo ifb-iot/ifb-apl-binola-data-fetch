@@ -17,9 +17,9 @@ exports.save = async (data, machine, headers) => {
 					upsert: true
 				}
 			}));
-			await collection.bulkWrite(bulkOps);
+			bulkOps.length > 0 ? await collection.bulkWrite(bulkOps) : console.log()
 
-			console.log("MACHINE DATA INSERTED | " + headers.ip + (headers.port === undefined ? "" : ":" + headers.port) + " | " + machine.location + " | " + machine.make + " " + machine.model + " | " + new Date().toDateString().slice(-11), new Date().toTimeString().substring(0, 8))
+			console.log("MACHINE DATA INSERTED | " + (headers.ip === undefined ? "" : ":" + headers.ip) + (headers.port === undefined ? "" : ":" + headers.port) + " | " + machine.location + " | " + machine.make + " " + machine.model + " | " + new Date().toDateString().slice(-11), new Date().toTimeString().substring(0, 8))
 		}
 	} finally {
 		await client.close();
